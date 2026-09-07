@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Key, Eye, EyeOff, ShieldCheck, AlertCircle, X, ExternalLink, Loader2, Check } from 'lucide-react';
+import { Key, ShieldCheck, AlertCircle, X, ExternalLink, Loader2, Check } from 'lucide-react';
 import type { GitHubUser } from '../types/github';
 
 interface TokenModalProps {
@@ -23,13 +23,12 @@ export const TokenModal: React.FC<TokenModalProps> = ({
   isValidating,
   authError,
   hasRepoScope,
-  isEnvToken,
   onSaveToken,
   onClearToken,
 }) => {
   const [inputToken, setInputToken] = useState(token);
-  const [showToken, setShowToken] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
 
   useEffect(() => {
     setInputToken(token);
@@ -140,46 +139,6 @@ export const TokenModal: React.FC<TokenModalProps> = ({
         )}
 
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div className="form-group">
-            <label className="form-label" htmlFor="pat-input">
-              <span>Personal Access Token (classic or fine-grained)</span>
-              <span className="form-label-tag">
-                {isEnvToken ? 'Loaded from .env (VITE_GIT_TOKEN)' : 'Stored locally in browser'}
-              </span>
-            </label>
-            <div className="input-with-action">
-              <input
-                id="pat-input"
-                type={showToken ? 'text' : 'password'}
-                className="form-input form-input-mono"
-                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx or github_pat_xxxx"
-                value={inputToken}
-                onChange={(e) => setInputToken(e.target.value)}
-                autoComplete="off"
-                required
-              />
-              <button
-                type="button"
-                className="input-action-btn"
-                onClick={() => setShowToken(!showToken)}
-                title={showToken ? 'Hide token' : 'Show token'}
-              >
-                {showToken ? <EyeOff size={14} /> : <Eye size={14} />}
-                <span>{showToken ? 'Hide' : 'Show'}</span>
-              </button>
-            </div>
-            <div className="form-helper">
-              {isEnvToken ? (
-                <>
-                  Token is loaded from <code>VITE_GIT_TOKEN</code> in your <code>.env</code> file. You can also override it here.
-                </>
-              ) : (
-                <>
-                  Tokens require the <code>repo</code> scope for branch creation, merging, and PR operations.
-                </>
-              )}
-            </div>
-          </div>
 
           <div
             style={{
@@ -198,7 +157,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
             <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               <li>Go to GitHub Settings &gt; Developer Settings &gt; Personal access tokens.</li>
               <li>Generate a <strong>Classic Token</strong> with <code>repo</code> scope, or a <strong>Fine-grained Token</strong> with Read/Write for <em>Contents</em> and <em>Pull Requests</em>.</li>
-              <li>Copy and paste the token string above.</li>
+              <li>Copy and paste the token in .env file</li>
             </ol>
             <a
               href="https://github.com/settings/tokens/new?scopes=repo&description=post-deployment-code-sync-tool"

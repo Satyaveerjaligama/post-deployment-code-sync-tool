@@ -249,9 +249,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
             <GitMerge size={22} style={{ color: 'var(--accent-primary)' }} />
             Post-Deployment Sync Configuration
           </h2>
-          <p className="card-subtitle">
-            Configure branches to create a synchronization branch, merge release changes, and open a back-merge PR.
-          </p>
         </div>
 
         {token && (
@@ -303,7 +300,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
         <div className="form-group">
           <label className="form-label" htmlFor="repo-select">
             <span>1. Repository</span>
-            <span className="form-label-tag">Select repository</span>
           </label>
           <SearchableSelect
             id="repo-select"
@@ -328,7 +324,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
         <div className="form-group">
           <label className="form-label" htmlFor="jira-id-input">
             <span>JIRA Ticket ID</span>
-            <span className="form-label-tag">Prefixes PR title (e.g. ABCD-1234)</span>
           </label>
           <div className="input-with-action">
             <input
@@ -364,58 +359,51 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
               </span>
             )}
           </div>
-          <div className="form-helper">
-            PR title will be formatted as <code>{jiraId.trim().toUpperCase() || 'ABCD-1234'} Sync ...</code>, self-assigned, and tagged with label <code>test_deployment_tool</code>.
-          </div>
         </div>
 
         {/* 2. SOURCE & RELEASE BRANCHES ROW */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-          {/* SOURCE BRANCH (Base from which new branch is created & PR target) */}
+        {/* SOURCE BRANCH (Base from which new branch is created & PR target) */}
 
-          <div className="form-group">
-            <label className="form-label" htmlFor="source-branch-select">
-              <span>2. Source Branch (Target)</span>
-              <span className="form-label-tag">e.g. main, master, dev</span>
-            </label>
-            <SearchableSelect
-              id="source-branch-select"
-              options={branchOptions}
-              value={sourceBranch}
-              onChange={setSourceBranch}
-              placeholder="Select source branch..."
-              searchPlaceholder="Search source branches..."
-              isLoading={isLoadingBranches}
-              disabled={isRunning || !selectedRepoFullName || !token}
-              allowCustomInput={true}
-              emptyText="No branches found. Type branch name to enter."
-            />
-            <div className="form-helper">
-              New branch will fork from this branch, and the final PR will target it.
-            </div>
+        <div className="form-group">
+          <label className="form-label" htmlFor="source-branch-select">
+            <span>2. Source Branch (Target)</span>
+          </label>
+          <SearchableSelect
+            id="source-branch-select"
+            options={branchOptions}
+            value={sourceBranch}
+            onChange={setSourceBranch}
+            placeholder="Select source branch..."
+            searchPlaceholder="Search source branches..."
+            isLoading={isLoadingBranches}
+            disabled={isRunning || !selectedRepoFullName || !token}
+            allowCustomInput={true}
+            emptyText="No branches found. Type branch name to enter."
+          />
+          <div className="form-helper">
+            New branch will fork from this branch, and the final PR will target it.
           </div>
+        </div>
 
-          {/* RELEASE BRANCH (Head to be merged) */}
-          <div className="form-group">
-            <label className="form-label" htmlFor="release-branch-select">
-              <span>3. Release Branch</span>
-              <span className="form-label-tag">e.g. release/v2.1.0</span>
-            </label>
-            <SearchableSelect
-              id="release-branch-select"
-              options={branchOptions}
-              value={releaseBranch}
-              onChange={setReleaseBranch}
-              placeholder="Select release branch..."
-              searchPlaceholder="Search release branches..."
-              isLoading={isLoadingBranches}
-              disabled={isRunning || !selectedRepoFullName || !token}
-              allowCustomInput={true}
-              emptyText="No branches found. Type branch name to enter."
-            />
-            <div className="form-helper">
-              Contains the deployed code that will be merged into the new branch.
-            </div>
+        {/* RELEASE BRANCH (Head to be merged) */}
+        <div className="form-group">
+          <label className="form-label" htmlFor="release-branch-select">
+            <span>3. Release Branch</span>
+          </label>
+          <SearchableSelect
+            id="release-branch-select"
+            options={branchOptions}
+            value={releaseBranch}
+            onChange={setReleaseBranch}
+            placeholder="Select release branch..."
+            searchPlaceholder="Search release branches..."
+            isLoading={isLoadingBranches}
+            disabled={isRunning || !selectedRepoFullName || !token}
+            allowCustomInput={true}
+            emptyText="No branches found. Type branch name to enter."
+          />
+          <div className="form-helper">
+            Contains the deployed code that will be merged into the new branch.
           </div>
         </div>
 
@@ -423,7 +411,7 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
         <div className="form-group">
           <label className="form-label" htmlFor="new-branch-input">
             <span>4. New Branch Name</span>
-            <span className="form-label-tag">Created from source & receives release</span>
+            <span className="form-label-tag">Created from source</span>
           </label>
           <div className="input-with-action">
             <input

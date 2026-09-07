@@ -2,7 +2,6 @@ import React from 'react';
 import {
   GitMerge,
   Key,
-  History,
   BookOpen,
   AlertCircle,
 } from 'lucide-react';
@@ -20,9 +19,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   user,
   hasRepoScope,
-  historyCount,
   onOpenTokenModal,
-  onOpenHistory,
   onOpenGuide,
 }) => {
   return (
@@ -34,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 className="brand-title">PostDeploy Sync</h1>
+              <h1 className="brand-title">Post Deployment Code Sync</h1>
             </div>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               GitHub Branch &amp; PR Post-Deployment Synchronization

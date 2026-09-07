@@ -146,20 +146,20 @@ export function App() {
                 <GitBranch size={15} style={{ color: 'var(--accent-primary)' }} />
                 What happens when you submit?
               </div>
-              <ul style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <ol type='a' style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 <li>
-                  <strong>1. New branch created:</strong> Forks from the latest commit of your <code>Source branch</code>.
+                  <strong>New branch created:</strong> Forks from the latest commit of your <code>Source branch</code>.
                 </li>
                 <li>
-                  <strong>2. Release branch merged:</strong> Merges latest changes from <code>Release branch</code> into the new branch.
+                  <strong>Release branch merged:</strong> Merges latest changes from <code>Release branch</code> into the new branch.
                 </li>
                 <li>
-                  <strong>3. Pull Request opened:</strong> Creates a PR from <code>New branch</code> &rarr; <code>Source branch</code>.
+                  <strong>Pull Request opened:</strong> Creates a PR from <code>New branch</code> &rarr; <code>Source branch</code>.
                 </li>
                 <li>
-                  <strong>4. Direct PR link returned:</strong> Immediate URL, summary card, and copy action ready for review.
+                  <strong>Direct PR link returned:</strong> Immediate URL, summary card, and copy action ready for review.
                 </li>
-              </ul>
+              </ol>
             </div>
           </div>
         </div>
