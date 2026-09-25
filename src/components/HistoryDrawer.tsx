@@ -8,7 +8,6 @@ import {
   ArrowRight,
   AlertTriangle,
   CheckCircle2,
-  Tag,
 } from 'lucide-react';
 import type { WorkflowHistoryItem } from '../types/github';
 
@@ -43,9 +42,8 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
             {history.length > 0 && (
               <button
                 type="button"
-                className="btn btn-outline btn-sm"
+                className="btn btn-danger btn-sm"
                 onClick={onClearHistory}
-                style={{ color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.2)' }}
                 title="Clear history"
               >
                 <Trash2 size={13} />
@@ -53,9 +51,9 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
             )}
             <button
               type="button"
-              className="btn btn-outline"
-              style={{ padding: '0.35rem', borderRadius: '50%' }}
+              className="btn btn-outline btn-icon"
               onClick={onClose}
+              title="Close drawer"
             >
               <X size={18} />
             </button>
@@ -71,24 +69,6 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                     <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {item.repoFullName}
                     </span>
-                    {item.jiraId && (
-                      <span
-                        style={{
-                          fontSize: '0.65rem',
-                          padding: '1px 5px',
-                          borderRadius: '4px',
-                          background: 'rgba(99, 102, 241, 0.15)',
-                          color: '#a5b4fc',
-                          fontFamily: 'var(--font-mono)',
-                          fontWeight: 600,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.2rem',
-                        }}
-                      >
-                        <Tag size={9} /> {item.jiraId}
-                      </span>
-                    )}
                   </div>
                   <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                     {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

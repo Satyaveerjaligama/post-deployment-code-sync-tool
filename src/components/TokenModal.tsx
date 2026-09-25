@@ -77,9 +77,9 @@ export const TokenModal: React.FC<TokenModalProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="btn btn-outline"
-            style={{ padding: '0.4rem', borderRadius: '50%' }}
+            className="btn btn-outline btn-icon"
             aria-label="Close"
           >
             <X size={18} />
@@ -112,8 +112,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
             <button
               type="button"
               onClick={onClearToken}
-              className="btn btn-outline btn-sm"
-              style={{ color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+              className="btn btn-danger btn-sm"
             >
               Disconnect
             </button>
@@ -178,7 +177,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
-            <button type="button" className="btn btn-outline" onClick={onClose}>
+            <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancel
             </button>
             <button

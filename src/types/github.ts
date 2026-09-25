@@ -105,7 +105,6 @@ export interface PostDeployFormData {
   releaseBranch: string;
   sourceBranch: string;
   newBranchName: string;
-  jiraId?: string;
   prTitle: string;
   prBody: string;
   isDraft: boolean;
@@ -118,7 +117,6 @@ export interface WorkflowHistoryItem {
   releaseBranch: string;
   sourceBranch: string;
   newBranchName: string;
-  jiraId?: string;
   prNumber: number;
   prUrl: string;
   prTitle: string;

@@ -163,9 +163,8 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-danger"
             onClick={onCancel}
-            style={{ borderColor: 'rgba(239, 68, 68, 0.3)', color: '#fca5a5' }}
           >
             <XCircle size={16} />
             Stop Workflow
@@ -173,13 +172,8 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
 
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-warning"
             onClick={onProceed}
-            style={{
-              background: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)',
-              color: '#ffffff',
-              boxShadow: '0 0 20px rgba(245, 158, 11, 0.35)',
-            }}
           >
             <Play size={16} />
             Proceed with Existing Branch

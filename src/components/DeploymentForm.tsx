@@ -11,7 +11,7 @@ import {
   Loader2,
   Send,
   AlertTriangle,
-  Tag,
+  Sparkles,
 } from 'lucide-react';
 import type { GitHubRepo, GitHubBranch, PostDeployFormData } from '../types/github';
 import { githubApi } from '../services/githubApi';
@@ -50,7 +50,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
   const [releaseBranch, setReleaseBranch] = useState<string>(initialValues?.releaseBranch || '');
   const [sourceBranch, setSourceBranch] = useState<string>(initialValues?.sourceBranch || '');
   const [newBranchName, setNewBranchName] = useState<string>(initialValues?.newBranchName || '');
-  const [jiraId, setJiraId] = useState<string>(initialValues?.jiraId || '');
 
   // Advanced options
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -155,10 +154,9 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
   const generateSuggestedBranchName = () => {
     const cleanRel = releaseBranch ? releaseBranch.replace(/[\/\\]/g, '-') : 'release';
     const cleanSrc = sourceBranch ? sourceBranch.replace(/[\/\\]/g, '-') : 'main';
-    const cleanJira = jiraId ? `${jiraId.trim().toUpperCase().replace(/[\/\\]/g, '-')}-` : '';
     const dateStr = new Date().toISOString().slice(0, 10);
     const randomSuffix = Math.random().toString(36).substring(2, 6);
-    const suggested = `sync/${cleanJira}${cleanRel}-into-${cleanSrc}-${dateStr}-${randomSuffix}`;
+    const suggested = `sync/${cleanRel}-into-${cleanSrc}-${dateStr}-${randomSuffix}`;
     setNewBranchName(suggested);
   };
 
@@ -169,19 +167,17 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
     }
   }, [releaseBranch, sourceBranch]);
 
-  // Update default PR title when branches or JIRA ID change
+  // Update default PR title when branches change
   useEffect(() => {
     if (releaseBranch && sourceBranch && newBranchName) {
-      const cleanJira = jiraId.trim().toUpperCase();
-      const baseTitle = `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
-      const expectedTitle = cleanJira ? `${cleanJira} ${baseTitle}` : baseTitle;
+      const expectedTitle = `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
 
       // Update if prTitle is empty or matches auto-generated pattern
       if (!prTitle || prTitle.includes("Sync: Merge '")) {
         setPrTitle(expectedTitle);
       }
     }
-  }, [releaseBranch, sourceBranch, newBranchName, jiraId]);
+  }, [releaseBranch, sourceBranch, newBranchName]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -199,7 +195,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
       releaseBranch,
       sourceBranch,
       newBranchName: newBranchName.trim(),
-      jiraId: jiraId.trim().toUpperCase(),
       prTitle: prTitle.trim(),
       prBody: prBody.trim(),
       isDraft,
@@ -320,46 +315,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
           />
         </div>
 
-        {/* JIRA TICKET / ID */}
-        <div className="form-group">
-          <label className="form-label" htmlFor="jira-id-input">
-            <span>JIRA Ticket ID</span>
-          </label>
-          <div className="input-with-action">
-            <input
-              id="jira-id-input"
-              type="text"
-              className="form-input form-input-mono"
-              placeholder="e.g. ABCD-1234"
-              value={jiraId}
-              onChange={(e) => setJiraId(e.target.value.toUpperCase())}
-              disabled={isRunning}
-            />
-            {jiraId && (
-              <span
-                style={{
-                  position: 'absolute',
-                  right: '0.75rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'rgba(99, 102, 241, 0.15)',
-                  border: '1px solid rgba(99, 102, 241, 0.3)',
-                  color: '#a5b4fc',
-                  fontSize: '0.75rem',
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  fontFamily: 'var(--font-mono)',
-                  fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                }}
-              >
-                <Tag size={12} /> {jiraId.trim().toUpperCase()}
-              </span>
-            )}
-          </div>
-        </div>
 
         {/* 2. SOURCE & RELEASE BRANCHES ROW */}
         {/* SOURCE BRANCH (Base from which new branch is created & PR target) */}
@@ -424,6 +379,18 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
               disabled={isRunning || !selectedRepoFullName}
               required
             />
+            {selectedRepoFullName && (
+              <button
+                type="button"
+                className="input-action-btn"
+                onClick={generateSuggestedBranchName}
+                disabled={isRunning}
+                title="Auto-generate sync branch name"
+              >
+                <Sparkles size={12} />
+                <span>Suggest</span>
+              </button>
+            )}
           </div>
           <div className="form-helper">
             This intermediate branch isolates the merge so it can be safely reviewed via Pull Request.
@@ -521,23 +488,23 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
         </div>
 
         {/* SUBMIT BUTTON */}
-        <div style={{ marginTop: '0.5rem' }}>
+        <div style={{ marginTop: '0.75rem' }}>
           <button
             type="submit"
             id="submit-workflow-btn"
-            className="btn btn-primary btn-lg"
+            className={`btn btn-primary btn-lg ${isRunning ? 'is-running' : ''}`}
             style={{ width: '100%' }}
             disabled={!isFormValid || isRunning}
           >
             {isRunning ? (
               <>
-                <Loader2 size={18} className="animate-spin" />
-                Executing Post-Deployment Workflow...
+                <Loader2 size={19} className="animate-spin" />
+                <span>Executing Post-Deployment Workflow...</span>
               </>
             ) : (
               <>
                 <Send size={18} />
-                Submit &amp; Run Post-Deployment Workflow
+                <span>Submit &amp; Run Post-Deployment Workflow</span>
               </>
             )}
           </button>

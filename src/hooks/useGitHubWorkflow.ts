@@ -141,7 +141,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
         releaseBranch,
         sourceBranch,
         newBranchName,
-        jiraId,
         prTitle,
         prBody,
         isDraft,
@@ -153,8 +152,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
         return;
       }
 
-      const cleanJira = jiraId ? jiraId.trim().toUpperCase() : '';
-
       setIsRunning(true);
       setError(null);
       setHasMergeConflict(false);
@@ -163,9 +160,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
       setSteps(INITIAL_STEPS.map((s) => ({ ...s, status: 'pending' })));
 
       addLog('cmd', `🚀 Starting post-deployment synchronization workflow for ${repoFullName}...`);
-      if (cleanJira) {
-        addLog('info', `JIRA Ticket: ${cleanJira}`);
-      }
       addLog('info', `Source Branch: ${sourceBranch} | Release Branch: ${releaseBranch} | New Branch: ${newBranchName}`);
 
       let branchSha = '';
@@ -255,7 +249,7 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
             repo,
             newBranchName,
             releaseBranch,
-            `Merge branch '${releaseBranch}' into '${newBranchName}' [Post-Deploy Back-Merge${cleanJira ? ` - ${cleanJira}` : ''}]`
+            `Merge branch '${releaseBranch}' into '${newBranchName}' [Post-Deploy Back-Merge]`
           );
 
           const step2End = Date.now();
@@ -411,17 +405,12 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
 
         addLog('info', `[Step 3] Opening Pull Request from '${newBranchName}' into '${sourceBranch}'...`);
 
-        // Format PR Title with JIRA ID first (e.g. ABCD-1234 Sync ...)
         let finalTitle = prTitle.trim();
         if (!finalTitle) {
-          finalTitle = cleanJira
-            ? `${cleanJira} Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`
-            : `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
-        } else if (cleanJira && !finalTitle.toUpperCase().startsWith(cleanJira)) {
-          finalTitle = `${cleanJira} ${finalTitle}`;
+          finalTitle = `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
         }
 
-        const defaultBody = `## Post-Deployment Back-Merge\n\n${cleanJira ? `- **JIRA Ticket**: \`${cleanJira}\`\n` : ''}- **Release Branch**: \`${releaseBranch}\`\n- **Target Source Branch**: \`${sourceBranch}\`\n- **Intermediate Sync Branch**: \`${newBranchName}\`\n- **Triggered via**: Post-Deployment Sync Tool\n\n### Verification Checklist\n- [ ] Review merge changes from release\n- [ ] Ensure automated test suites pass\n- [ ] Confirm no regressions in target branch`;
+        const defaultBody = `## Post-Deployment Back-Merge\n\n- **Release Branch**: \`${releaseBranch}\`\n- **Target Source Branch**: \`${sourceBranch}\`\n- **Intermediate Sync Branch**: \`${newBranchName}\`\n- **Triggered via**: Post-Deployment Sync Tool\n\n### Verification Checklist\n- [ ] Review merge changes from release\n- [ ] Ensure automated test suites pass\n- [ ] Confirm no regressions in target branch`;
 
         const finalBody = prBody.trim() || defaultBody;
 
@@ -516,7 +505,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
           releaseBranch,
           sourceBranch,
           newBranchName,
-          jiraId: cleanJira || undefined,
           prNumber: prResult.number,
           prUrl: prResult.html_url,
           prTitle: prResult.title,

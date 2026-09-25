@@ -281,23 +281,16 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
             <>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 onClick={onClose}
-                style={{ borderColor: 'rgba(239, 68, 68, 0.3)', color: '#fca5a5' }}
               >
                 <XCircle size={16} />
                 Cancel &amp; Stop
               </button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className={`btn ${isMergedPR ? 'btn-purple' : 'btn-warning'}`}
                 onClick={onProceed}
-                style={{
-                  background: isMergedPR
-                    ? 'linear-gradient(135deg, #7e22ce 0%, #a855f7 100%)'
-                    : 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)',
-                  color: '#ffffff',
-                }}
                 autoFocus
               >
                 <Play size={16} />

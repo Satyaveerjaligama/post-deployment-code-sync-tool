@@ -4,6 +4,7 @@ import {
   Key,
   BookOpen,
   AlertCircle,
+  History,
 } from 'lucide-react';
 import type { GitHubUser } from '../types/github';
 
@@ -19,7 +20,9 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   user,
   hasRepoScope,
+  historyCount,
   onOpenTokenModal,
+  onOpenHistory,
   onOpenGuide,
 }) => {
   return (
@@ -40,6 +43,17 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="header-actions">
+          {/* Sync History Button */}
+          <button
+            type="button"
+            className="btn btn-outline btn-sm"
+            onClick={onOpenHistory}
+            title="View sync history"
+          >
+            <History size={14} />
+            <span>History {historyCount > 0 ? `(${historyCount})` : ''}</span>
+          </button>
+
           {/* Workflow Guide Button */}
           <button
             type="button"

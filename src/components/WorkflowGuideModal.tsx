@@ -43,9 +43,10 @@ export const WorkflowGuideModal: React.FC<WorkflowGuideModalProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="btn btn-outline"
-            style={{ padding: '0.4rem', borderRadius: '50%' }}
+            className="btn btn-outline btn-icon"
+            title="Close guide"
           >
             <X size={18} />
           </button>

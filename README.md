@@ -38,10 +38,10 @@ Directly merging into `main` can:
 - ❌ Result in missing audit trails or unlinked tickets.
 
 **Post Deployment Code Sync solves this by:**
-1. Isolating the merge into a dedicated intermediate sync branch (`sync/PROJ-123-release-into-main-...`).
+1. Isolating the merge into a dedicated intermediate sync branch (`sync/release-into-main-...`).
 2. Merging the release branch into that intermediate branch.
 3. Opening a formal Pull Request from the sync branch into the target source branch.
-4. Auto-tagging with JIRA tickets, self-assigning to you, and labeling with `test_deployment_tool`.
+4. Self-assigning the PR to you and labeling with `test_deployment_tool`.
 
 ---
 
@@ -52,9 +52,7 @@ Directly merging into `main` can:
   - Step 2: Merge release branch into sync branch.
   - Step 3: Open PR, self-assign, and apply label.
   - Step 4: Return instant clickable PR link with one-click copy.
-- **JIRA Ticket Integration**:
-  - Automatically prefixes the PR title (e.g. `ABCD-1234 Sync: Merge 'release' into 'main' via 'newBranch'`).
-  - Embeds JIRA ticket into suggested branch names and PR descriptions.
+
 - **Automated PR Enrichment**:
   - **Self-Assignment**: Automatically assigns the created Pull Request to your authenticated GitHub account.
   - **Auto-Labeling**: Automatically adds the `test_deployment_tool` label to the PR.
@@ -81,7 +79,7 @@ Directly merging into `main` can:
 ```text
                +-----------------------------------+
                |  Fill Form: Repo, Source Branch,  |
-               |   Release Branch, JIRA ID, etc.   |
+               |   Release Branch, Sync Name, etc. |
                +-----------------+-----------------+
                                  |
                                  v
@@ -159,8 +157,7 @@ The user provides:
 2. **Source Branch (Target)**: The base branch you want to merge into (e.g. `main` or `master`).
 3. **Release Branch**: The deployed branch containing new commits (e.g. `release/v2.1.0`).
 4. **New Branch Name**: The intermediate branch name (auto-generated or custom).
-5. **JIRA ID** *(Optional)*: e.g. `PROJ-1024` or `ABCD-1234`.
-6. **Advanced PR Options** *(Optional)*: Custom PR title, custom description body, and Draft toggle.
+5. **Advanced PR Options** *(Optional)*: Custom PR title, custom description body, and Draft toggle.
 
 ### 2. Step 1: Branch Verification & Creation
 - Calls `githubApi.checkBranchExists(token, owner, repo, newBranchName)`.
@@ -182,7 +179,7 @@ The user provides:
 - Prior to creating a new PR, checks existing PRs across all states (`state=all`):
   - Checks for **Open PRs**, **Merged PRs**, and **Closed PRs** (see [Edge Cases](#-edge-cases--smart-modal-confirmations)).
 - When proceeding to create:
-  - Formats PR Title with JIRA ID first: `${JIRA_ID} Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`.
+  - Formats PR Title: `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`.
   - Creates PR via `POST /repos/{owner}/{repo}/pulls`.
   - **Self-Assigns**: Assigns PR to authenticated username (`POST /repos/{owner}/{repo}/issues/{prNumber}/assignees`).
   - **Labels PR**: Adds label `test_deployment_tool` (`POST /repos/{owner}/{repo}/issues/{prNumber}/labels`).
@@ -307,16 +304,13 @@ The application automatically reads the token on startup from your environment f
 3. **Select Branches**:
    - **2. Source Branch (Target)**: Select your target branch (e.g. `main`).
    - **3. Release Branch**: Select the deployed release branch (e.g. `release/v2.1.0`).
-4. **Enter JIRA ID (Optional)**:
-   - Type your ticket ID (e.g. `ABCD-1234` or `PROJ-5678`).
-   - The tool will automatically prefix the suggested branch name and PR title.
-5. **Review New Branch Name**:
-   - The tool suggests a format like `sync/ABCD-1234-release-v2.1.0-into-main-YYYY-MM-DD-xxxx`.
+4. **Review New Branch Name**:
+   - The tool suggests a format like `sync/release-v2.1.0-into-main-YYYY-MM-DD-xxxx`.
    - Click the **Suggest** button to refresh the name or customize it manually.
-6. **Submit & Monitor**:
+5. **Submit & Monitor**:
    - Click **Submit & Run Post-Deployment Workflow**.
    - Watch real-time execution in the **Execution Timeline** and view live log streams in the **Terminal Console**.
-7. **Access Your Pull Request**:
+6. **Access Your Pull Request**:
    - Once complete, the **Pull Request Ready** card displays the direct link.
    - Click **Open in GitHub** or **Copy Link**.
    - The PR will already have you self-assigned and include the `test_deployment_tool` label.
