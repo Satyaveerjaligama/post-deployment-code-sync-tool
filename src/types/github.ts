@@ -110,16 +110,4 @@ export interface PostDeployFormData {
   isDraft: boolean;
 }
 
-export interface WorkflowHistoryItem {
-  id: string;
-  timestamp: string;
-  repoFullName: string;
-  releaseBranch: string;
-  sourceBranch: string;
-  newBranchName: string;
-  prNumber: number;
-  prUrl: string;
-  prTitle: string;
-  status: 'success' | 'conflict_manual_needed' | 'failed';
-}
 

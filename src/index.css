@@ -1222,53 +1222,6 @@ body {
   color: #bae6fd;
 }
 
-/* Drawer Component for History */
-.drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 90;
-}
-
-.drawer-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 440px;
-  background: var(--bg-card-solid);
-  border-left: 1px solid var(--border-card);
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-  z-index: 95;
-  display: flex;
-  flex-direction: column;
-  padding: 1.75rem;
-  animation: slide-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes slide-left {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-.history-item-card {
-  background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  transition: all 0.15s ease;
-}
-
-.history-item-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: var(--bg-elevated);
-}
-
 /* Spinners */
 .animate-spin {
   animation: spin 1s linear infinite;

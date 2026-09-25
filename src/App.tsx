@@ -6,7 +6,6 @@ import { TokenModal } from './components/TokenModal';
 import { DeploymentForm } from './components/DeploymentForm';
 import { ExecutionTimeline } from './components/ExecutionTimeline';
 import { PRResultCard } from './components/PRResultCard';
-import { HistoryDrawer } from './components/HistoryDrawer';
 import { WorkflowGuideModal } from './components/WorkflowGuideModal';
 import { BranchExistsModal } from './components/BranchExistsModal';
 import { PRExistsModal } from './components/PRExistsModal';
@@ -37,10 +36,8 @@ export function App() {
     prExistsModal,
     handleProceedExistingPR,
     handleCloseExistingPR,
-    history,
     runWorkflow,
     resetWorkflow,
-    clearHistory,
   } = useGitHubWorkflow(token, user?.login);
 
 
@@ -48,7 +45,6 @@ export function App() {
 
 
   const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const handleFormSubmit = (formData: PostDeployFormData) => {
@@ -61,9 +57,7 @@ export function App() {
       <Header
         user={user}
         hasRepoScope={hasRepoScope}
-        historyCount={history.length}
         onOpenTokenModal={() => setIsTokenModalOpen(true)}
-        onOpenHistory={() => setIsHistoryOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
       />
 
@@ -179,13 +173,6 @@ export function App() {
         onClearToken={clearToken}
       />
 
-      {/* History Drawer */}
-      <HistoryDrawer
-        isOpen={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        history={history}
-        onClearHistory={clearHistory}
-      />
 
       {/* Workflow Documentation Guide Modal */}
       <WorkflowGuideModal

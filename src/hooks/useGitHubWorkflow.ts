@@ -3,14 +3,11 @@ import { githubApi } from '../services/githubApi';
 import type {
   GitHubPullRequest,
   PostDeployFormData,
-  WorkflowHistoryItem,
   WorkflowLog,
   WorkflowStep,
 } from '../types/github';
 import type { BranchExistsConfirmationData } from '../components/BranchExistsModal';
 import type { PRExistsModalData } from '../components/PRExistsModal';
-
-const HISTORY_STORAGE_KEY = 'pdt_workflow_history';
 
 const INITIAL_STEPS: WorkflowStep[] = [
   {
@@ -59,15 +56,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
     resolve?: (proceed: boolean) => void;
   } | null>(null);
 
-  // History state
-  const [history, setHistory] = useState<WorkflowHistoryItem[]>(() => {
-    try {
-      const stored = localStorage.getItem(HISTORY_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
 
   const addLog = useCallback((level: WorkflowLog['level'], message: string, details?: any) => {
     const newLog: WorkflowLog = {
@@ -497,25 +485,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
         setCreatedPR(prResult);
         addLog('success', `🎉 Workflow complete! PR Link: ${prResult.html_url}`);
 
-        // Save to History
-        const historyItem: WorkflowHistoryItem = {
-          id: Math.random().toString(36).substring(2, 9),
-          timestamp: new Date().toISOString(),
-          repoFullName,
-          releaseBranch,
-          sourceBranch,
-          newBranchName,
-          prNumber: prResult.number,
-          prUrl: prResult.html_url,
-          prTitle: prResult.title,
-          status: hasMergeConflict ? 'conflict_manual_needed' : 'success',
-        };
-
-        setHistory((prev) => {
-          const updated = [historyItem, ...prev.slice(0, 29)];
-          localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
       } catch (err: any) {
         const errorMsg = err.message || 'An unexpected error occurred during workflow execution.';
         setError(errorMsg);
@@ -538,11 +507,6 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
   );
 
 
-  const clearHistory = useCallback(() => {
-    localStorage.removeItem(HISTORY_STORAGE_KEY);
-    setHistory([]);
-  }, []);
-
   return {
     isRunning,
     steps,
@@ -556,10 +520,8 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
     prExistsModal: prExistsModal?.data || null,
     handleProceedExistingPR,
     handleCloseExistingPR,
-    history,
     runWorkflow,
     resetWorkflow,
-    clearHistory,
   };
 }
 

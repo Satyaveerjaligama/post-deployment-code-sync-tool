@@ -143,7 +143,6 @@ Directly merging into `main` can:
                                  v
                +-----------------------------------+
                | Display PR Result Card & Link     |
-               | Save to Local Sync History        |
                +-----------------------------------+
 ```
 
@@ -190,7 +189,6 @@ The user provides:
   - One-click **Copy PR Link** button.
   - One-click **Open in GitHub** button.
   - Badges for `Self-Assigned` and `test_deployment_tool`.
-  - Saves the record to **Sync History** in `localStorage`.
 
 ---
 
@@ -336,7 +334,6 @@ post-deployment-tool/
     │   ├── DeploymentForm.tsx      # Main form with searchable dropdowns & suggestions
     │   ├── ExecutionTimeline.tsx   # Step timeline & live terminal console
     │   ├── Header.tsx              # Top navigation, brand title & user profile
-    │   ├── HistoryDrawer.tsx       # Drawer displaying past PR synchronizations
     │   ├── PRExistsModal.tsx       # 3-way modal (Open/Merged/Closed PR handlers)
     │   ├── PRResultCard.tsx        # Success summary card with copyable PR link
     │   ├── SearchableSelect.tsx    # Custom accessible combobox component
