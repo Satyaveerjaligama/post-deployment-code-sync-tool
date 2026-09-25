@@ -108,6 +108,10 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               color: selectedOption || value ? 'var(--text-primary)' : 'var(--text-muted)',
+              fontFamily:
+                selectedOption?.badgeType === 'branch' || selectedOption?.badgeType === 'default'
+                  ? 'var(--font-mono)'
+                  : 'inherit',
             }}
           >
             {selectedOption ? selectedOption.label : value ? value : placeholder}
@@ -162,7 +166,17 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', overflow: 'hidden' }}>
                       {option.icon}
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span
+                          style={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            fontFamily:
+                              option.badgeType === 'branch' || option.badgeType === 'default'
+                                ? 'var(--font-mono)'
+                                : 'inherit',
+                          }}
+                        >
                           {option.label}
                         </span>
                         {option.sublabel && (

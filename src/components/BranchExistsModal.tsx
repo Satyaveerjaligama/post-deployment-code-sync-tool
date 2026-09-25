@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   ExternalLink,
   ArrowRight,
+  GitBranch,
   Play,
   XCircle,
 } from 'lucide-react';
@@ -41,26 +42,26 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div
             style={{
-              width: 40,
-              height: 40,
+              width: 38,
+              height: 38,
               borderRadius: 'var(--radius-md)',
-              background: 'rgba(245, 158, 11, 0.15)',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: 'rgba(187, 128, 9, 0.15)',
+              border: '1px solid rgba(210, 153, 34, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fbbf24',
+              color: '#d29922',
               flexShrink: 0,
             }}
           >
-            <AlertTriangle size={22} />
+            <AlertTriangle size={20} />
           </div>
 
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               Branch Already Exists
             </h3>
-            <p style={{ fontSize: '0.8rem', color: '#fde68a' }}>
+            <p style={{ fontSize: '0.8rem', color: '#e3b341' }}>
               Action required: A branch with this name is already present in this repository.
             </p>
           </div>
@@ -87,7 +88,8 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Target New Branch:</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: '#fbbf24' }}>
+              <span className="branch-pill branch-pill-warning">
+                <GitBranch size={12} />
                 {branchName}
               </span>
               <a
@@ -113,12 +115,21 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Planned Workflow:</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-              <span style={{ color: '#a5b4fc' }}>{releaseBranch}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span className="branch-pill branch-pill-release">
+                <GitBranch size={11} />
+                {releaseBranch}
+              </span>
               <ArrowRight size={12} style={{ color: 'var(--text-muted)' }} />
-              <span style={{ color: '#fbbf24' }}>{branchName}</span>
+              <span className="branch-pill branch-pill-warning">
+                <GitBranch size={11} />
+                {branchName}
+              </span>
               <ArrowRight size={12} style={{ color: 'var(--text-muted)' }} />
-              <span style={{ color: '#6ee7b7' }}>{sourceBranch}</span>
+              <span className="branch-pill branch-pill-source">
+                <GitBranch size={11} />
+                {sourceBranch}
+              </span>
             </div>
           </div>
         </div>

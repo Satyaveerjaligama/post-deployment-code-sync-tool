@@ -68,10 +68,10 @@ export function App() {
           <div
             style={{
               padding: '1.25rem 1.5rem',
-              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
               borderRadius: 'var(--radius-lg)',
-              marginBottom: '2rem',
+              marginBottom: '1.75rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -80,7 +80,7 @@ export function App() {
             }}
           >
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Sparkles size={18} style={{ color: 'var(--accent-secondary)' }} />
                 Automate your GitHub Post-Deployment Back-Merges in Seconds
               </h3>
@@ -136,19 +136,19 @@ export function App() {
                 lineHeight: 1.5,
               }}
             >
-              <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <GitBranch size={15} style={{ color: 'var(--accent-primary)' }} />
+              <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <GitBranch size={15} style={{ color: 'var(--text-secondary)' }} />
                 What happens when you submit?
               </div>
-              <ol type='a' style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <ol type='a' style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <li>
-                  <strong>New branch created:</strong> Forks from the latest commit of your <code>Source branch</code>.
+                  <strong>New branch created:</strong> Forks from the latest commit of your <span className="branch-pill branch-pill-source">Source branch</span>.
                 </li>
                 <li>
-                  <strong>Release branch merged:</strong> Merges latest changes from <code>Release branch</code> into the new branch.
+                  <strong>Release branch merged:</strong> Merges latest changes from <span className="branch-pill branch-pill-release">Release branch</span> into the new branch.
                 </li>
                 <li>
-                  <strong>Pull Request opened:</strong> Creates a PR from <code>New branch</code> &rarr; <code>Source branch</code>.
+                  <strong>Pull Request opened:</strong> Creates a PR from <span className="branch-pill branch-pill-new">New branch</span> &rarr; <span className="branch-pill branch-pill-source">Source branch</span>.
                 </li>
                 <li>
                   <strong>Direct PR link returned:</strong> Immediate URL, summary card, and copy action ready for review.

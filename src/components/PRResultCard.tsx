@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import {
   GitPullRequest,
+  GitBranch,
   ExternalLink,
   Copy,
   Check,
   RotateCcw,
-  ArrowRight,
   AlertTriangle,
-  Sparkles,
   Tag,
   UserCheck,
 } from 'lucide-react';
@@ -47,55 +46,24 @@ export const PRResultCard: React.FC<PRResultCardProps> = ({
     <div className="pr-card">
       <div className="pr-card-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-          <span className="pr-badge">
-            <Sparkles size={14} /> Pull Request #{pr.number} Created
-          </span>
-          <span
-            style={{
-              fontSize: '0.725rem',
-              fontWeight: 600,
-              padding: '2px 8px',
-              borderRadius: '999px',
-              background: 'rgba(6, 182, 212, 0.15)',
-              border: '1px solid rgba(6, 182, 212, 0.3)',
-              color: '#67e8f9',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-            }}
-          >
-            <Tag size={11} /> test_deployment_tool
-          </span>
-          <span
-            style={{
-              fontSize: '0.725rem',
-              fontWeight: 600,
-              padding: '2px 8px',
-              borderRadius: '999px',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              color: '#6ee7b7',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-            }}
-          >
-            <UserCheck size={11} /> Self-Assigned
-          </span>
-          {pr.draft && (
-            <span
-              style={{
-                fontSize: '0.725rem',
-                fontWeight: 600,
-                padding: '2px 8px',
-                borderRadius: '999px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: 'var(--text-secondary)',
-              }}
-            >
-              Draft
+          {pr.draft ? (
+            <span className="pr-badge-draft">
+              <GitPullRequest size={14} /> Draft
+            </span>
+          ) : (
+            <span className="pr-badge-open">
+              <GitPullRequest size={14} /> Open
             </span>
           )}
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+            Pull Request #{pr.number}
+          </span>
+          <span className="branch-pill branch-pill-neutral">
+            <Tag size={11} /> test_deployment_tool
+          </span>
+          <span className="branch-pill branch-pill-neutral">
+            <UserCheck size={11} /> Self-Assigned
+          </span>
         </div>
 
         <button
@@ -113,52 +81,35 @@ export const PRResultCard: React.FC<PRResultCardProps> = ({
         <h3
           style={{
             fontSize: '1.25rem',
-            fontWeight: 700,
+            fontWeight: 600,
             color: 'var(--text-primary)',
             letterSpacing: '-0.01em',
-            marginBottom: '0.35rem',
+            marginBottom: '0.5rem',
           }}
         >
           {pr.title}
         </h3>
 
-        {/* Branch Flow Pills */}
+        {/* GitHub Branch Flow Line */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.45rem',
             flexWrap: 'wrap',
-            marginTop: '0.5rem',
-            fontSize: '0.85rem',
+            fontSize: '0.825rem',
+            color: 'var(--text-secondary)',
           }}
         >
-          <span
-            style={{
-              padding: '2px 10px',
-              borderRadius: '6px',
-              background: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              color: '#a5b4fc',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.8rem',
-            }}
-          >
-            {pr.head.ref}
-          </span>
-          <ArrowRight size={14} style={{ color: 'var(--text-muted)' }} />
-          <span
-            style={{
-              padding: '2px 10px',
-              borderRadius: '6px',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              color: '#6ee7b7',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.8rem',
-            }}
-          >
+          <span>wants to merge into</span>
+          <span className="branch-pill branch-pill-base" title="Base branch (PR target)">
+            <GitBranch size={12} />
             {pr.base.ref}
+          </span>
+          <span>from</span>
+          <span className="branch-pill branch-pill-head" title="Head branch (Sync branch)">
+            <GitBranch size={12} />
+            {pr.head.ref}
           </span>
         </div>
       </div>

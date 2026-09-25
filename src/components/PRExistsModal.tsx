@@ -5,9 +5,9 @@ import {
   ArrowRight,
   GitPullRequest,
   GitMerge,
-  XCircle,
+  GitBranch,
   Play,
-  HelpCircle,
+  XCircle,
 } from 'lucide-react';
 
 
@@ -63,39 +63,39 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div
             style={{
-              width: 42,
-              height: 42,
+              width: 38,
+              height: 38,
               borderRadius: 'var(--radius-md)',
               background: isOpenPR
-                ? 'rgba(239, 68, 68, 0.15)'
+                ? 'rgba(46, 160, 67, 0.15)'
                 : isMergedPR
-                ? 'rgba(168, 85, 247, 0.15)'
-                : 'rgba(245, 158, 11, 0.15)',
+                ? 'rgba(163, 113, 247, 0.15)'
+                : 'rgba(248, 81, 73, 0.15)',
               border: `1px solid ${
                 isOpenPR
-                  ? 'rgba(239, 68, 68, 0.4)'
+                  ? 'rgba(63, 185, 80, 0.4)'
                   : isMergedPR
-                  ? 'rgba(168, 85, 247, 0.4)'
-                  : 'rgba(245, 158, 11, 0.4)'
+                  ? 'rgba(163, 113, 247, 0.4)'
+                  : 'rgba(248, 81, 73, 0.4)'
               }`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: isOpenPR ? '#f87171' : isMergedPR ? '#c084fc' : '#fbbf24',
+              color: isOpenPR ? '#3fb950' : isMergedPR ? '#a371f7' : '#f85149',
               flexShrink: 0,
             }}
           >
             {isOpenPR ? (
-              <AlertCircle size={24} />
+              <GitPullRequest size={20} />
             ) : isMergedPR ? (
-              <GitMerge size={24} />
+              <GitMerge size={20} />
             ) : (
-              <HelpCircle size={24} />
+              <AlertCircle size={20} />
             )}
           </div>
 
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {isOpenPR && 'Open Pull Request Already Exists'}
               {isMergedPR && 'Merged Pull Request Detected'}
               {isClosedPR && 'Closed Pull Request Detected'}
@@ -103,7 +103,7 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
             <p
               style={{
                 fontSize: '0.8rem',
-                color: isOpenPR ? '#fca5a5' : isMergedPR ? '#e9d5ff' : '#fde68a',
+                color: isOpenPR ? '#7ee787' : isMergedPR ? '#d2a8ff' : '#fca5a5',
               }}
             >
               {isOpenPR && 'Flow stopped: An active open Pull Request already exists.'}
@@ -133,10 +133,16 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Branch Path:</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
-              <span style={{ color: '#a5b4fc' }}>{newBranchName}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span className="branch-pill branch-pill-head">
+                <GitBranch size={11} />
+                {newBranchName}
+              </span>
               <ArrowRight size={12} style={{ color: 'var(--text-muted)' }} />
-              <span style={{ color: '#6ee7b7' }}>{sourceBranch}</span>
+              <span className="branch-pill branch-pill-base">
+                <GitBranch size={11} />
+                {sourceBranch}
+              </span>
             </div>
           </div>
 
@@ -147,28 +153,14 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span
-                  style={{
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    padding: '1px 6px',
-                    borderRadius: '4px',
-                    textTransform: 'uppercase',
-                    background: isOpenPR
-                      ? 'rgba(16, 185, 129, 0.15)'
-                      : isMergedPR
-                      ? 'rgba(168, 85, 247, 0.15)'
-                      : 'rgba(239, 68, 68, 0.15)',
-                    color: isOpenPR ? '#6ee7b7' : isMergedPR ? '#d8b4fe' : '#fca5a5',
-                    border: `1px solid ${
-                      isOpenPR
-                        ? 'rgba(16, 185, 129, 0.3)'
-                        : isMergedPR
-                        ? 'rgba(168, 85, 247, 0.3)'
-                        : 'rgba(239, 68, 68, 0.3)'
-                    }`,
-                  }}
+                  className={
+                    isOpenPR ? 'pr-badge-open' : isMergedPR ? 'pr-badge-merged' : 'pr-badge-draft'
+                  }
+                  style={{ fontSize: '0.7rem', padding: '2px 8px' }}
                 >
-                  {prStatus}
+                  {isOpenPR && <GitPullRequest size={11} />}
+                  {isMergedPR && <GitMerge size={11} />}
+                  {prStatus.toUpperCase()}
                 </span>
                 <a
                   href={existingPrUrl}
@@ -179,12 +171,12 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
                     fontWeight: 600,
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.35rem',
+                    gap: '0.25rem',
                     textDecoration: 'none',
                   }}
+                  title="Open PR in GitHub"
                 >
-                  <GitPullRequest size={13} />
-                  PR #{existingPrNumber}
+                  #{existingPrNumber}
                   <ExternalLink size={12} />
                 </a>
               </div>

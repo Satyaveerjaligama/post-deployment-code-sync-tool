@@ -3,6 +3,7 @@ import {
   GitBranch,
   GitPullRequest,
   GitMerge,
+  ArrowLeft,
   ChevronDown,
   ChevronUp,
   RefreshCw,
@@ -225,7 +226,7 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
     label: branch.name,
     badge: branch.name === defaultBranchName ? 'default' : undefined,
     badgeType: branch.name === defaultBranchName ? 'default' : 'branch',
-    icon: <GitBranch size={14} style={{ color: 'var(--accent-secondary)', flexShrink: 0 }} />,
+    icon: <GitBranch size={14} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />,
   }));
 
   const isFormValid =
@@ -396,6 +397,46 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
             This intermediate branch isolates the merge so it can be safely reviewed via Pull Request.
           </div>
         </div>
+
+        {/* GITHUB-STYLE BRANCH FLOW & COMPARE PREVIEW */}
+        {selectedRepoFullName && sourceBranch && (
+          <div className="github-compare-bar">
+            <div className="github-compare-label">
+              <GitMerge size={14} style={{ color: 'var(--text-secondary)' }} />
+              <span>Branch Flow Preview:</span>
+            </div>
+            <div className="github-compare-flow">
+              <span className="branch-pill branch-pill-source" title="Target/Base Branch (PR target)">
+                <GitBranch size={12} />
+                {sourceBranch}
+              </span>
+              <span className="github-flow-arrow" title="Merged into">
+                <ArrowLeft size={13} strokeWidth={2.5} />
+              </span>
+              <span
+                className="branch-pill branch-pill-new"
+                title="Intermediate Sync Branch (merges release changes)"
+              >
+                <GitBranch size={12} />
+                {newBranchName || 'new-sync-branch'}
+              </span>
+              {releaseBranch && (
+                <>
+                  <span className="github-flow-arrow" title="Merged into">
+                    <ArrowLeft size={13} strokeWidth={2.5} />
+                  </span>
+                  <span
+                    className="branch-pill branch-pill-release"
+                    title="Release Branch (Contains deployed changes)"
+                  >
+                    <GitBranch size={12} />
+                    {releaseBranch}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* ADVANCED PR OPTIONS TOGGLE */}
         <div
