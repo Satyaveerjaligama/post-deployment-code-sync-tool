@@ -242,8 +242,8 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
       <div className="card-header-title">
         <div>
           <h2 className="card-title">
-            <GitMerge size={22} style={{ color: 'var(--accent-primary)' }} />
-            Post-Deployment Sync Configuration
+            <GitBranch size={22} style={{ color: 'var(--accent-primary)' }} />
+            Branch &amp; PR Configuration
           </h2>
         </div>
 

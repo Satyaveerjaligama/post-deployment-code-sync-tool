@@ -142,13 +142,13 @@ export function App() {
               </div>
               <ol type='a' style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <li>
-                  <strong>New branch created:</strong> Forks from the latest commit of your <span className="branch-pill branch-pill-source">Source branch</span>.
+                  <strong>New branch created:</strong> Forks from the latest commit of your <span className="branch-pill branch-pill-source">Source branch</span>
                 </li>
                 <li>
                   <strong>Release branch merged:</strong> Merges latest changes from <span className="branch-pill branch-pill-release">Release branch</span> into the new branch.
                 </li>
                 <li>
-                  <strong>Pull Request opened:</strong> Creates a PR from <span className="branch-pill branch-pill-new">New branch</span> &rarr; <span className="branch-pill branch-pill-source">Source branch</span>.
+                  <strong>Pull Request opened:</strong> Creates a PR from <span className="branch-pill branch-pill-new">New branch</span> &rarr; <span className="branch-pill branch-pill-source">Source branch</span>
                 </li>
                 <li>
                   <strong>Direct PR link returned:</strong> Immediate URL, summary card, and copy action ready for review.
