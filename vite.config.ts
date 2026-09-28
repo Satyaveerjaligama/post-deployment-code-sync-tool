@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/github-tool',
+  base: '/post-deployment-code-sync-tool',
   plugins: [react()],
 })
