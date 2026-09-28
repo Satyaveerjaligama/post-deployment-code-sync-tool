@@ -63,40 +63,6 @@ export function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
-        {/* Banner if token is missing */}
-        {!token && (
-          <div
-            style={{
-              padding: '1.25rem 1.5rem',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-card)',
-              borderRadius: 'var(--radius-lg)',
-              marginBottom: '1.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '1rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sparkles size={18} style={{ color: 'var(--accent-secondary)' }} />
-                Automate your GitHub Post-Deployment Back-Merges in Seconds
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                Connect your GitHub account to dynamically load your repositories &amp; branches, create a sync branch, merge release changes, and create back-merge PRs.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => setIsTokenModalOpen(true)}
-            >
-              Get Started with GitHub PAT
-            </button>
-          </div>
-        )}
 
         {/* Workflow & Execution Grid */}
         <div className="workflow-layout">
