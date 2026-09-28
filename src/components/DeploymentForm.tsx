@@ -486,7 +486,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
                   id="pr-title-input"
                   type="text"
                   className="form-input"
-                  placeholder="Pull request title..."
                   value={prTitle}
                   onChange={(e) => setPrTitle(e.target.value)}
                   disabled={isRunning}
@@ -501,7 +500,6 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
                   id="pr-body-input"
                   className="form-input form-input-mono"
                   rows={4}
-                  placeholder="Provide PR description and checklist..."
                   value={prBody}
                   onChange={(e) => setPrBody(e.target.value)}
                   disabled={isRunning}

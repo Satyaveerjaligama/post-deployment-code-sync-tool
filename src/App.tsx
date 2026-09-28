@@ -9,7 +9,7 @@ import { PRResultCard } from './components/PRResultCard';
 import { WorkflowGuideModal } from './components/WorkflowGuideModal';
 import { BranchExistsModal } from './components/BranchExistsModal';
 import { PRExistsModal } from './components/PRExistsModal';
-import { GitBranch, Sparkles } from 'lucide-react';
+import { GitBranch } from 'lucide-react';
 import type { PostDeployFormData } from './types/github';
 
 export function App() {
