@@ -321,6 +321,7 @@ The application automatically reads the token on startup from your environment f
 post-deployment-tool/
 ├── .env                  # Local environment file containing VITE_GIT_TOKEN
 ├── .env.example          # Template environment file
+├── AGENTS.md             # AI Agent & Developer Architecture Guide
 ├── index.html            # Entry HTML page
 ├── package.json          # Dependencies and scripts
 ├── tsconfig.json         # TypeScript configuration
