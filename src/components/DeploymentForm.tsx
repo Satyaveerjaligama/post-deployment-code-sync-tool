@@ -238,35 +238,35 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
       <div className="card-header-title">
         <div>
           <h2 className="card-title">
-            <GitBranch size={22} style={{ color: 'var(--accent-primary)' }} />
-            Branch &amp; PR Configuration
+            <GitBranch size={22} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+            <span>Branch &amp; PR Configuration</span>
           </h2>
         </div>
 
         {token && (
           <button
             type="button"
-            className="btn btn-outline btn-sm"
+            className="btn btn-outline btn-sm form-refresh-btn"
             onClick={loadRepos}
             disabled={isLoadingRepos || isRunning}
             title="Refresh repositories"
+            aria-label="Refresh repositories"
           >
             <RefreshCw size={13} className={isLoadingRepos ? 'animate-spin' : ''} />
-            Refresh
+            <span className="form-refresh-text">Refresh</span>
           </button>
         )}
       </div>
 
       {!token ? (
-        <div className="alert-banner alert-banner-info" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="alert-banner alert-banner-info token-alert-banner">
           <div>
             <strong>GitHub Token Required:</strong> Connect your GitHub Personal Access Token to select your repositories and automate the branch/PR workflow.
           </div>
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm token-alert-btn"
             onClick={onOpenTokenModal}
-            style={{ flexShrink: 0 }}
           >
             Connect GitHub
           </button>
@@ -385,7 +385,7 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
                 title="Auto-generate sync branch name"
               >
                 <Sparkles size={12} />
-                <span>Suggest</span>
+                <span className="input-action-text">Suggest</span>
               </button>
             )}
           </div>
@@ -398,23 +398,23 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
         {selectedRepoFullName && sourceBranch && (
           <div className="github-compare-bar">
             <div className="github-compare-label">
-              <GitMerge size={14} style={{ color: 'var(--text-secondary)' }} />
+              <GitMerge size={14} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
               <span>Branch Flow Preview:</span>
             </div>
             <div className="github-compare-flow">
-              <span className="branch-pill branch-pill-source" title="Target/Base Branch (PR target)">
-                <GitBranch size={12} />
-                {sourceBranch}
+              <span className="branch-pill branch-pill-source" title={`Target/Base Branch: ${sourceBranch}`}>
+                <GitBranch size={12} style={{ flexShrink: 0 }} />
+                <span className="branch-pill-text">{sourceBranch}</span>
               </span>
               <span className="github-flow-arrow" title="Merged into">
                 <ArrowLeft size={13} strokeWidth={2.5} />
               </span>
               <span
                 className="branch-pill branch-pill-new"
-                title="Intermediate Sync Branch (merges release changes)"
+                title={`Intermediate Sync Branch: ${newBranchName || 'new-sync-branch'}`}
               >
-                <GitBranch size={12} />
-                {newBranchName || 'new-sync-branch'}
+                <GitBranch size={12} style={{ flexShrink: 0 }} />
+                <span className="branch-pill-text">{newBranchName || 'new-sync-branch'}</span>
               </span>
               {releaseBranch && (
                 <>
@@ -423,10 +423,10 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
                   </span>
                   <span
                     className="branch-pill branch-pill-release"
-                    title="Release Branch (Contains deployed changes)"
+                    title={`Release Branch: ${releaseBranch}`}
                   >
-                    <GitBranch size={12} />
-                    {releaseBranch}
+                    <GitBranch size={12} style={{ flexShrink: 0 }} />
+                    <span className="branch-pill-text">{releaseBranch}</span>
                   </span>
                 </>
               )}
@@ -445,7 +445,7 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
           <button
             type="button"
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="btn btn-outline btn-sm"
+            className="btn btn-outline btn-sm advanced-toggle-btn"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -454,11 +454,13 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
               background: 'rgba(255, 255, 255, 0.02)',
             }}
           >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <GitPullRequest size={14} style={{ color: 'var(--accent-secondary)' }} />
-              PR Customization & Details (Optional)
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0, overflow: 'hidden' }}>
+              <GitPullRequest size={14} style={{ color: 'var(--accent-secondary)', flexShrink: 0 }} />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                PR Customization &amp; Details (Optional)
+              </span>
             </span>
-            {showAdvanced ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {showAdvanced ? <ChevronUp size={16} style={{ flexShrink: 0 }} /> : <ChevronDown size={16} style={{ flexShrink: 0 }} />}
           </button>
 
           {showAdvanced && (

@@ -95,11 +95,21 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
           }
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', overflow: 'hidden' }}>
+        <div
+          className="custom-select-trigger-inner"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            overflow: 'hidden',
+            minWidth: 0,
+            flex: 1,
+          }}
+        >
           {isLoading ? (
-            <Loader2 size={16} className="animate-spin" style={{ color: 'var(--accent-secondary)' }} />
+            <Loader2 size={16} className="animate-spin" style={{ color: 'var(--accent-secondary)', flexShrink: 0 }} />
           ) : selectedOption?.icon ? (
-            selectedOption.icon
+            <span style={{ display: 'inline-flex', flexShrink: 0 }}>{selectedOption.icon}</span>
           ) : null}
 
           <span
@@ -107,6 +117,8 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
+              minWidth: 0,
+              flex: 1,
               color: selectedOption || value ? 'var(--text-primary)' : 'var(--text-muted)',
               fontFamily:
                 selectedOption?.badgeType === 'branch' || selectedOption?.badgeType === 'default'
@@ -122,6 +134,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
               className={`branch-tag ${
                 selectedOption.badgeType === 'default' ? 'branch-tag-default' : ''
               }`}
+              style={{ flexShrink: 0 }}
             >
               {selectedOption.badge}
             </span>
@@ -142,7 +155,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
       {isOpen && (
         <div className="custom-select-dropdown">
           <div className="custom-select-search">
-            <Search size={14} style={{ color: 'var(--text-muted)' }} />
+            <Search size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
             <input
               ref={searchInputRef}
               type="text"
@@ -163,14 +176,24 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                     className={`custom-select-option ${isSelected ? 'selected' : ''}`}
                     onClick={() => handleSelect(option.value)}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', overflow: 'hidden' }}>
-                      {option.icon}
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.6rem',
+                        overflow: 'hidden',
+                        minWidth: 0,
+                        flex: 1,
+                      }}
+                    >
+                      {option.icon ? <span style={{ display: 'inline-flex', flexShrink: 0 }}>{option.icon}</span> : null}
+                      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1, overflow: 'hidden' }}>
                         <span
                           style={{
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
+                            minWidth: 0,
                             fontFamily:
                               option.badgeType === 'branch' || option.badgeType === 'default'
                                 ? 'var(--font-mono)'
@@ -180,7 +203,15 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                           {option.label}
                         </span>
                         {option.sublabel && (
-                          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                          <span
+                            style={{
+                              fontSize: '0.72rem',
+                              color: 'var(--text-muted)',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
                             {option.sublabel}
                           </span>
                         )}

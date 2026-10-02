@@ -67,7 +67,7 @@ export function App() {
         {/* Workflow & Execution Grid */}
         <div className="workflow-layout">
           {/* Left Column: Form & PR Result */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="workflow-column">
             {createdPR ? (
               <PRResultCard
                 pr={createdPR}
@@ -85,7 +85,7 @@ export function App() {
           </div>
 
           {/* Right Column: Execution Timeline & Live Logs */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="workflow-column">
             <ExecutionTimeline
               steps={steps}
               logs={logs}
