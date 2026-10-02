@@ -21,7 +21,6 @@ This tool automates a 4-step GitHub back-merge workflow:
 3. **Opens a formal Pull Request** from the new sync branch back into the target **Source Branch**.
 4. **Auto-enriches the PR**:
    - Automatically self-assigns the PR to the authenticated GitHub user.
-   - Automatically attaches the `test_deployment_tool` label.
 5. **Presents an immediate PR dashboard** with copyable link, status badges, and direct GitHub navigation.
 
 ---
@@ -65,6 +64,8 @@ post-deployment-code-sync-tool/
     ├── App.tsx                  # Root application coordinator
     ├── App.css                  # Grid layout & responsive breakpoint rules
     ├── index.css                # Global design system, glassmorphic styles, variables
+    ├── constants.ts             # Centralized application constants, API endpoints, tokens
+    ├── utils.ts                 # Utility functions (clipboard, formatting, PR & branch generators)
     ├── vite-env.d.ts            # Vite client type definitions
     │
     ├── types/
@@ -91,7 +92,23 @@ post-deployment-code-sync-tool/
 
 ---
 
-## 4. Key Files & Exact Responsibilities
+### `src/constants.ts`
+Centralizes all repository-wide constants:
+- `REPO_URL`: Repository URL for clone/navigation link.
+- `GITHUB_API_BASE` & `GITHUB_API_VERSION`: GitHub REST API configuration.
+- `GITHUB_NEW_TOKEN_URL`: Link for pre-configured PAT token creation.
+- `TOKEN_STORAGE_KEY` & `ENV_GIT_TOKEN`: Token persistence keys and env fallbacks.
+- `INITIAL_WORKFLOW_STEPS`: Step definitions for the 4-phase synchronization pipeline.
+
+### `src/utils.ts`
+Pure helper and utility functions:
+- `copyToClipboard(text)`: Async clipboard copy with DOM fallback.
+- `sanitizeBranchName(name)`: Replaces slashes and spaces with hyphens.
+- `generateSuggestedBranchName(rel, src)`: Constructs timestamped intermediate sync branch names.
+- `generateDefaultPrTitle(rel, src, newBranch)`: Generates standard PR title.
+- `generateDefaultPrBody(rel, src, newBranch)`: Generates default checklist markdown body.
+- `getGitHubBranchUrl(repo, branch)` & `getGitHubRepoUrl(repo)`: Constructs direct GitHub URLs.
+- `formatDateTime(date)`: Localized human-readable date/time formatter.
 
 ### `src/types/github.ts`
 Defines all core domain interfaces:
@@ -139,7 +156,7 @@ The workflow orchestrator containing the core business logic:
   - Existing branch on remote.
   - Clean merge vs. already-up-to-date vs. merge conflict (HTTP 409).
   - Existing open PR vs. merged PR vs. closed unmerged PR.
-  - Automated PR self-assignment and tagging with `test_deployment_tool`.
+  - Automated PR self-assignment to the authenticated user.
 
 ### `src/App.tsx`
 Top-level layout and state bridge:
@@ -214,8 +231,6 @@ The primary user interaction interface:
 │ Once clear to create:                                  │
 │ 1. POST /repos/{owner}/{repo}/pulls                    │
 │ 2. POST /repos/.../issues/{prNum}/assignees (Self)     │
-│ 3. POST /repos/.../issues/{prNum}/labels               │
-│    (Add label 'test_deployment_tool')                  │
 └───────────────────────┬────────────────────────────────┘
                         │
                         ▼
@@ -271,8 +286,7 @@ The project uses a bespoke dark glassmorphism aesthetic implemented in `src/inde
 When modifying any part of this codebase, you **must adhere to these rules**:
 
 1. **Auto-Assignment**: All created Pull Requests must be assigned to the authenticated user (`currentUserLogin`) when available.
-2. **Mandatory Label**: All created Pull Requests must have the label `test_deployment_tool` applied.
-3. **Open PR Collision Protection**:
+2. **Open PR Collision Protection**:
    - If an open PR already exists for the head & base pair, **NEVER** attempt to force-create another PR.
    - The user must be presented with the `PRExistsModal` containing **only a single "Okay" button** that closes the modal and terminates the workflow without further action.
 4. **Intermediate Sync Branch Naming**:

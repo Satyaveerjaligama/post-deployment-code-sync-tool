@@ -9,6 +9,7 @@ import {
   Play,
   XCircle,
 } from 'lucide-react';
+import { formatDateTime } from '../utils';
 
 
 export interface PRExistsModalData {
@@ -191,13 +192,13 @@ export const PRExistsModal: React.FC<PRExistsModalProps> = ({
 
           {mergedAt && (
             <div style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
-              Merged on: {new Date(mergedAt).toLocaleString()}
+              Merged on: {formatDateTime(mergedAt)}
             </div>
           )}
 
           {closedAt && !mergedAt && (
             <div style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
-              Closed on: {new Date(closedAt).toLocaleString()}
+              Closed on: {formatDateTime(closedAt)}
             </div>
           )}
 

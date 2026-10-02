@@ -7,10 +7,10 @@ import {
   Check,
   RotateCcw,
   AlertTriangle,
-  Tag,
   UserCheck,
 } from 'lucide-react';
 import type { GitHubPullRequest } from '../types/github';
+import { copyToClipboard } from '../utils';
 
 interface PRResultCardProps {
   pr: GitHubPullRequest;
@@ -26,17 +26,8 @@ export const PRResultCard: React.FC<PRResultCardProps> = ({
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(pr.html_url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      const textArea = document.createElement('textarea');
-      textArea.value = pr.html_url;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
+    const success = await copyToClipboard(pr.html_url);
+    if (success) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -57,9 +48,6 @@ export const PRResultCard: React.FC<PRResultCardProps> = ({
           )}
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
             Pull Request #{pr.number}
-          </span>
-          <span className="branch-pill branch-pill-neutral">
-            <Tag size={11} /> test_deployment_tool
           </span>
           <span className="branch-pill branch-pill-neutral">
             <UserCheck size={11} /> Self-Assigned

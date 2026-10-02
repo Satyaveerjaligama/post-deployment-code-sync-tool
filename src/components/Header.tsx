@@ -4,8 +4,10 @@ import {
   Key,
   BookOpen,
   AlertCircle,
+  GitFork,
 } from 'lucide-react';
 import type { GitHubUser } from '../types/github';
+import { REPO_URL } from '../constants';
 
 interface HeaderProps {
   user: GitHubUser | null;
@@ -29,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 className="brand-title">Post Deployment Code Sync</h1>
+              <h1 className="brand-title">Post - Deployment Code Sync</h1>
             </div>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               GitHub Branch &amp; PR Post-Deployment Synchronization
@@ -38,7 +40,17 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="header-actions">
-          {/* Workflow Guide Button */}
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline btn-sm"
+            style={{ textDecoration: 'none' }}
+            title="Clone repository on GitHub"
+          >
+            <GitFork size={14} />
+            <span>Clone Repo</span>
+          </a>
           <button
             type="button"
             className="btn btn-outline btn-sm"
@@ -48,8 +60,6 @@ export const Header: React.FC<HeaderProps> = ({
             <BookOpen size={14} />
             <span>Guide</span>
           </button>
-
-          {/* GitHub Auth Button */}
           {user ? (
             <button
               type="button"

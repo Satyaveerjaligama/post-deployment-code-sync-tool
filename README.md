@@ -40,8 +40,7 @@ Directly merging into `main` can:
 **Post Deployment Code Sync solves this by:**
 1. Isolating the merge into a dedicated intermediate sync branch (`sync/release-into-main-...`).
 2. Merging the release branch into that intermediate branch.
-3. Opening a formal Pull Request from the sync branch into the target source branch.
-4. Self-assigning the PR to you and labeling with `test_deployment_tool`.
+4. Self-assigning the PR to you for review.
 
 ---
 
@@ -55,7 +54,6 @@ Directly merging into `main` can:
 
 - **Automated PR Enrichment**:
   - **Self-Assignment**: Automatically assigns the created Pull Request to your authenticated GitHub account.
-  - **Auto-Labeling**: Automatically adds the `test_deployment_tool` label to the PR.
 - **Intelligent Branch & PR State Confirmations**:
   - **Branch Exists**: Shows a detailed confirmation modal to either proceed with the existing branch or abort.
   - **Open PR Exists**: Displays an error modal with PR details and a single **"Okay"** button that halts the flow safely.
@@ -137,7 +135,6 @@ Directly merging into `main` can:
                +-----------------------------------+
                | 1. Create Pull Request (POST /pulls)
                | 2. Self-Assign to User             |
-               | 3. Add Label 'test_deployment_tool'|
                +-----------------+-----------------+
                                  |
                                  v
@@ -179,16 +176,13 @@ The user provides:
   - Checks for **Open PRs**, **Merged PRs**, and **Closed PRs** (see [Edge Cases](#-edge-cases--smart-modal-confirmations)).
 - When proceeding to create:
   - Formats PR Title: `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`.
-  - Creates PR via `POST /repos/{owner}/{repo}/pulls`.
   - **Self-Assigns**: Assigns PR to authenticated username (`POST /repos/{owner}/{repo}/issues/{prNumber}/assignees`).
-  - **Labels PR**: Adds label `test_deployment_tool` (`POST /repos/{owner}/{repo}/issues/{prNumber}/labels`).
 
 ### 5. Step 4: Complete & Direct PR Link
 - Displays `PRResultCard` with:
   - Direct PR link and PR Number.
   - One-click **Copy PR Link** button.
-  - One-click **Open in GitHub** button.
-  - Badges for `Self-Assigned` and `test_deployment_tool`.
+  - Badge for `Self-Assigned`.
 
 ---
 
@@ -311,7 +305,7 @@ The application automatically reads the token on startup from your environment f
 6. **Access Your Pull Request**:
    - Once complete, the **Pull Request Ready** card displays the direct link.
    - Click **Open in GitHub** or **Copy Link**.
-   - The PR will already have you self-assigned and include the `test_deployment_tool` label.
+   - The PR will already have you self-assigned.
 
 ---
 

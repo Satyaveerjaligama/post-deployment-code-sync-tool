@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Key, ShieldCheck, AlertCircle, X, ExternalLink, Loader2, Check } from 'lucide-react';
 import type { GitHubUser } from '../types/github';
+import { GITHUB_NEW_TOKEN_URL } from '../constants';
 
 interface TokenModalProps {
   isOpen: boolean;
@@ -159,7 +160,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
               <li>Copy and paste the token in .env file</li>
             </ol>
             <a
-              href="https://github.com/settings/tokens/new?scopes=repo&description=post-deployment-code-sync-tool"
+              href={GITHUB_NEW_TOKEN_URL}
               target="_blank"
               rel="noopener noreferrer"
               style={{

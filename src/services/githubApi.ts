@@ -5,8 +5,7 @@ import type {
   GitHubRepo,
   GitHubUser,
 } from '../types/github';
-
-const GITHUB_API_BASE = 'https://api.github.com';
+import { GITHUB_API_BASE, GITHUB_API_VERSION } from '../constants';
 
 export class GitHubApiError extends Error {
   status: number;
@@ -34,7 +33,7 @@ async function githubFetch<T>(
   if (token) {
     headers.set('Authorization', `Bearer ${token.trim()}`);
   }
-  headers.set('X-GitHub-Api-Version', '2022-11-28');
+  headers.set('X-GitHub-Api-Version', GITHUB_API_VERSION);
 
   const response = await fetch(url, {
     ...options,

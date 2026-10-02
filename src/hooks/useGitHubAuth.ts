@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { githubApi } from '../services/githubApi';
 import type { GitHubUser } from '../types/github';
-
-const TOKEN_STORAGE_KEY = 'pdt_github_pat';
-const ENV_GIT_TOKEN = (import.meta.env.VITE_GIT_TOKEN as string | undefined)?.trim() || '';
+import { TOKEN_STORAGE_KEY, ENV_GIT_TOKEN } from '../constants';
 
 export function useGitHubAuth() {
   const [token, setToken] = useState<string>(() => {

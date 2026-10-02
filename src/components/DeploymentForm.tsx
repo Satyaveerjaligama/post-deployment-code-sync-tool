@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import type { GitHubRepo, GitHubBranch, PostDeployFormData } from '../types/github';
 import { githubApi } from '../services/githubApi';
+import { generateSuggestedBranchName, generateDefaultPrTitle } from '../utils';
 import { SearchableSelect } from './SearchableSelect';
 import type { SelectOption } from './SearchableSelect';
 
@@ -152,33 +153,28 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
   }, [token, selectedRepoFullName, repos]);
 
   // Auto-generate suggested new branch name
-  const generateSuggestedBranchName = () => {
-    const cleanRel = releaseBranch ? releaseBranch.replace(/[\/\\]/g, '-') : 'release';
-    const cleanSrc = sourceBranch ? sourceBranch.replace(/[\/\\]/g, '-') : 'main';
-    const dateStr = new Date().toISOString().slice(0, 10);
-    const randomSuffix = Math.random().toString(36).substring(2, 6);
-    const suggested = `sync/${cleanRel}-into-${cleanSrc}-${dateStr}-${randomSuffix}`;
-    setNewBranchName(suggested);
+  const handleRegenerateBranchName = () => {
+    setNewBranchName(generateSuggestedBranchName(releaseBranch, sourceBranch));
   };
 
   // Set default suggestion if empty and branches are chosen
   useEffect(() => {
     if (releaseBranch && sourceBranch && !newBranchName) {
-      generateSuggestedBranchName();
+      setNewBranchName(generateSuggestedBranchName(releaseBranch, sourceBranch));
     }
-  }, [releaseBranch, sourceBranch]);
+  }, [releaseBranch, sourceBranch, newBranchName]);
 
   // Update default PR title when branches change
   useEffect(() => {
     if (releaseBranch && sourceBranch && newBranchName) {
-      const expectedTitle = `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
+      const expectedTitle = generateDefaultPrTitle(releaseBranch, sourceBranch, newBranchName);
 
       // Update if prTitle is empty or matches auto-generated pattern
       if (!prTitle || prTitle.includes("Sync: Merge '")) {
         setPrTitle(expectedTitle);
       }
     }
-  }, [releaseBranch, sourceBranch, newBranchName]);
+  }, [releaseBranch, sourceBranch, newBranchName, prTitle]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -384,7 +380,7 @@ export const DeploymentForm: React.FC<DeploymentFormProps> = ({
               <button
                 type="button"
                 className="input-action-btn"
-                onClick={generateSuggestedBranchName}
+                onClick={handleRegenerateBranchName}
                 disabled={isRunning}
                 title="Auto-generate sync branch name"
               >

@@ -7,6 +7,7 @@ import {
   Play,
   XCircle,
 } from 'lucide-react';
+import { getGitHubBranchUrl } from '../utils';
 
 
 export interface BranchExistsConfirmationData {
@@ -33,7 +34,7 @@ export const BranchExistsModal: React.FC<BranchExistsModalProps> = ({
   if (!isOpen || !data) return null;
 
   const { repoFullName, branchName, sourceBranch, releaseBranch, existingSha } = data;
-  const githubBranchUrl = `https://github.com/${repoFullName}/tree/${encodeURIComponent(branchName)}`;
+  const githubBranchUrl = getGitHubBranchUrl(repoFullName, branchName);
 
   return (
     <div className="modal-backdrop" onClick={onCancel}>

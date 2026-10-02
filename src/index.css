@@ -218,9 +218,14 @@ body {
   outline: none;
   white-space: nowrap;
   user-select: none;
+  text-decoration: none;
   -webkit-font-smoothing: antialiased;
   transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
   transition-property: color, background-color, box-shadow, border-color, transform;
+}
+
+.btn:hover {
+  text-decoration: none;
 }
 
 .btn:active:not(:disabled) {

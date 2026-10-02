@@ -8,37 +8,12 @@ import type {
 } from '../types/github';
 import type { BranchExistsConfirmationData } from '../components/BranchExistsModal';
 import type { PRExistsModalData } from '../components/PRExistsModal';
-
-const INITIAL_STEPS: WorkflowStep[] = [
-  {
-    id: 'create-branch',
-    title: '1. Create New Branch',
-    description: 'Fetch source branch SHA and initialize the new branch',
-    status: 'idle',
-  },
-  {
-    id: 'merge-release',
-    title: '2. Merge Release Branch',
-    description: 'Merge release branch changes into the new branch',
-    status: 'idle',
-  },
-  {
-    id: 'create-pr',
-    title: '3. Create Pull Request',
-    description: 'Open PR from new branch back into source branch',
-    status: 'idle',
-  },
-  {
-    id: 'complete',
-    title: '4. Pull Request Ready',
-    description: 'Provide PR link and synchronization details',
-    status: 'idle',
-  },
-];
+import { INITIAL_WORKFLOW_STEPS } from '../constants';
+import { generateDefaultPrTitle, generateDefaultPrBody } from '../utils';
 
 export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [steps, setSteps] = useState<WorkflowStep[]>(INITIAL_STEPS);
+  const [steps, setSteps] = useState<WorkflowStep[]>(INITIAL_WORKFLOW_STEPS);
   const [logs, setLogs] = useState<WorkflowLog[]>([]);
   const [createdPR, setCreatedPR] = useState<GitHubPullRequest | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +53,7 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
   );
 
   const resetWorkflow = useCallback(() => {
-    setSteps(INITIAL_STEPS);
+    setSteps(INITIAL_WORKFLOW_STEPS);
     setLogs([]);
     setCreatedPR(null);
     setError(null);
@@ -145,7 +120,7 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
       setHasMergeConflict(false);
       setCreatedPR(null);
       setLogs([]);
-      setSteps(INITIAL_STEPS.map((s) => ({ ...s, status: 'pending' })));
+      setSteps(INITIAL_WORKFLOW_STEPS.map((s) => ({ ...s, status: 'pending' })));
 
       addLog('cmd', `🚀 Starting post-deployment synchronization workflow for ${repoFullName}...`);
       addLog('info', `Source Branch: ${sourceBranch} | Release Branch: ${releaseBranch} | New Branch: ${newBranchName}`);
@@ -393,14 +368,11 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
 
         addLog('info', `[Step 3] Opening Pull Request from '${newBranchName}' into '${sourceBranch}'...`);
 
-        let finalTitle = prTitle.trim();
-        if (!finalTitle) {
-          finalTitle = `Sync: Merge '${releaseBranch}' into '${sourceBranch}' via '${newBranchName}'`;
-        }
+        const finalTitle =
+          prTitle.trim() || generateDefaultPrTitle(releaseBranch, sourceBranch, newBranchName);
 
-        const defaultBody = `## Post-Deployment Back-Merge\n\n- **Release Branch**: \`${releaseBranch}\`\n- **Target Source Branch**: \`${sourceBranch}\`\n- **Intermediate Sync Branch**: \`${newBranchName}\`\n- **Triggered via**: Post-Deployment Sync Tool\n\n### Verification Checklist\n- [ ] Review merge changes from release\n- [ ] Ensure automated test suites pass\n- [ ] Confirm no regressions in target branch`;
-
-        const finalBody = prBody.trim() || defaultBody;
+        const finalBody =
+          prBody.trim() || generateDefaultPrBody(releaseBranch, sourceBranch, newBranchName);
 
         try {
           prResult = await githubApi.createPullRequest(token, owner, repo, {
@@ -452,21 +424,12 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
           }
         }
 
-        // 3b. Add label 'test_deployment_tool'
-        try {
-          addLog('info', `[Step 3] Adding label 'test_deployment_tool' to PR #${prResult.number}...`);
-          await githubApi.addLabels(token, owner, repo, prResult.number, ['test_deployment_tool']);
-          addLog('success', `[Step 3] Added label 'test_deployment_tool' to PR #${prResult.number}`);
-        } catch (labelErr: any) {
-          addLog('warn', `⚠️ [Step 3] Could not add label: ${labelErr.message}`);
-        }
-
         const step3End = Date.now();
         updateStep('create-pr', {
           status: 'success',
           completedAt: step3End,
           durationMs: step3End - step3Start,
-          detail: `Pull Request #${prResult.number} created: "${prResult.title}" (Assigned: @${currentUserLogin || 'user'}, Label: test_deployment_tool)`,
+          detail: `Pull Request #${prResult.number} created: "${prResult.title}" (Assigned: @${currentUserLogin || 'user'})`,
         });
         addLog('success', `[Step 3] Pull Request #${prResult.number} successfully created!`);
 
@@ -503,7 +466,7 @@ export function useGitHubWorkflow(token: string, currentUserLogin?: string) {
         setIsRunning(false);
       }
     },
-    [token, currentUserLogin, addLog, updateStep, hasMergeConflict]
+    [token, currentUserLogin, addLog, updateStep]
   );
 
 
