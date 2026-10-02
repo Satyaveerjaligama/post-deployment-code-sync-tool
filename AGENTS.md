@@ -97,7 +97,7 @@ Centralizes all repository-wide constants:
 - `REPO_URL`: Repository URL for clone/navigation link.
 - `GITHUB_API_BASE` & `GITHUB_API_VERSION`: GitHub REST API configuration.
 - `GITHUB_NEW_TOKEN_URL`: Link for pre-configured PAT token creation.
-- `TOKEN_STORAGE_KEY` & `ENV_GIT_TOKEN`: Token persistence keys and env fallbacks.
+- `ENV_GIT_TOKEN`: Token loaded from `VITE_GIT_TOKEN` in `.env`.
 - `INITIAL_WORKFLOW_STEPS`: Step definitions for the 4-phase synchronization pipeline.
 
 ### `src/utils.ts`
@@ -143,7 +143,7 @@ All external communication to GitHub REST API (`https://api.github.com`):
 
 ### `src/hooks/useGitHubAuth.ts`
 Encapsulates token lifecycle and authentication:
-- Initialization order: `VITE_GIT_TOKEN` from env -> `localStorage('pdt_github_pat')` -> empty string.
+- Initialization: Loaded directly from `VITE_GIT_TOKEN` in `.env`
 - Validates token against GitHub `/user` on change.
 - Checks if token has required `repo` scope (or fine-grained equivalents).
 - Exposes `token`, `user`, `isValidating`, `authError`, `hasRepoScope`, `isEnvToken`, `saveToken(token)`, and `clearToken()`.

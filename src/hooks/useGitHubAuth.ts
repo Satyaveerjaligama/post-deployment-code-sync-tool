@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { githubApi } from '../services/githubApi';
 import type { GitHubUser } from '../types/github';
-import { TOKEN_STORAGE_KEY, ENV_GIT_TOKEN } from '../constants';
+import { ENV_GIT_TOKEN } from '../constants';
 
 export function useGitHubAuth() {
   const [token, setToken] = useState<string>(() => {
-    return ENV_GIT_TOKEN || localStorage.getItem(TOKEN_STORAGE_KEY) || '';
+    return ENV_GIT_TOKEN;
   });
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [isValidating, setIsValidating] = useState<boolean>(false);
@@ -31,8 +31,6 @@ export function useGitHubAuth() {
       const scopes = userData.scopes || [];
       const hasScope = scopes.length === 0 || scopes.includes('repo') || scopes.includes('public_repo');
       setHasRepoScope(hasScope);
-
-      localStorage.setItem(TOKEN_STORAGE_KEY, pat.trim());
     } catch (err: any) {
       setUser(null);
       setAuthError(err.message || 'Failed to authenticate with GitHub');
@@ -56,7 +54,6 @@ export function useGitHubAuth() {
     setToken('');
     setUser(null);
     setAuthError(null);
-    localStorage.removeItem(TOKEN_STORAGE_KEY);
   };
 
   return {

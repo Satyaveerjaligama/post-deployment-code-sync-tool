@@ -14,9 +14,8 @@ export const GITHUB_NEW_TOKEN_URL =
   'https://github.com/settings/tokens/new?scopes=repo&description=post-deployment-code-sync-tool';
 
 /**
- * LocalStorage and Environment variable keys.
+ * Environment variable token configuration.
  */
-export const TOKEN_STORAGE_KEY = 'pdt_github_pat';
 export const ENV_GIT_TOKEN =
   (import.meta.env.VITE_GIT_TOKEN as string | undefined)?.trim() || '';
 

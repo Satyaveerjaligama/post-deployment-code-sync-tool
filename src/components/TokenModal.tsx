@@ -1,51 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Key, ShieldCheck, AlertCircle, X, ExternalLink, Loader2, Check } from 'lucide-react';
+import React from 'react';
+import { Key, ShieldCheck, AlertCircle, X, ExternalLink } from 'lucide-react';
 import type { GitHubUser } from '../types/github';
 import { GITHUB_NEW_TOKEN_URL } from '../constants';
 
 interface TokenModalProps {
   isOpen: boolean;
   onClose: () => void;
-  token: string;
+  token?: string;
   user: GitHubUser | null;
-  isValidating: boolean;
+  isValidating?: boolean;
   authError: string | null;
   hasRepoScope: boolean;
   isEnvToken?: boolean;
-  onSaveToken: (token: string) => Promise<void>;
-  onClearToken: () => void;
+  onSaveToken?: (token: string) => Promise<void>;
+  onClearToken?: () => void;
 }
 
 export const TokenModal: React.FC<TokenModalProps> = ({
   isOpen,
   onClose,
-  token,
   user,
-  isValidating,
   authError,
   hasRepoScope,
-  onSaveToken,
-  onClearToken,
 }) => {
-  const [inputToken, setInputToken] = useState(token);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-
-
-  useEffect(() => {
-    setInputToken(token);
-  }, [token, isOpen]);
-
   if (!isOpen) return null;
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputToken.trim()) return;
-    await onSaveToken(inputToken.trim());
-    setSaveSuccess(true);
-    setTimeout(() => {
-      setSaveSuccess(false);
-    }, 2000);
-  };
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -110,13 +88,6 @@ export const TokenModal: React.FC<TokenModalProps> = ({
                 </div>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={onClearToken}
-              className="btn btn-danger btn-sm"
-            >
-              Disconnect
-            </button>
           </div>
         )}
 
@@ -138,8 +109,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
           </div>
         )}
 
-        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div
             style={{
               padding: '0.85rem 1rem',
@@ -152,12 +122,13 @@ export const TokenModal: React.FC<TokenModalProps> = ({
             }}
           >
             <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
-              How to create a Personal Access Token:
+              How to configure your Personal Access Token:
             </div>
             <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               <li>Go to GitHub Settings &gt; Developer Settings &gt; Personal access tokens.</li>
               <li>Generate a <strong>Classic Token</strong> with <code>repo</code> scope, or a <strong>Fine-grained Token</strong> with Read/Write for <em>Contents</em> and <em>Pull Requests</em>.</li>
-              <li>Copy and paste the token in .env file</li>
+              <li>Copy and paste the token into your <code>.env</code> file: <code>VITE_GIT_TOKEN=ghp_your_token</code></li>
+              <li>Restart the dev server if needed.</li>
             </ol>
             <a
               href={GITHUB_NEW_TOKEN_URL}
@@ -176,35 +147,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
               Generate Token with Pre-configured Scopes <ExternalLink size={13} />
             </a>
           </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isValidating || !inputToken.trim()}
-            >
-              {isValidating ? (
-                <>
-                  <Loader2 size={16} className="animate-spin" />
-                  Validating Token...
-                </>
-              ) : saveSuccess ? (
-                <>
-                  <Check size={16} />
-                  Connected!
-                </>
-              ) : (
-                <>
-                  <Key size={16} />
-                  Save &amp; Authenticate
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
