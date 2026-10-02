@@ -34,9 +34,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="brand-title-full">Post-Deployment Code Sync</span>
               <span className="brand-title-compact">Post-Deployment Sync</span>
             </h1>
-            <p className="brand-subtitle">
-              GitHub Branch &amp; PR Post-Deployment Synchronization
-            </p>
           </div>
         </div>
 
